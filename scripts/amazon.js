@@ -53,7 +53,6 @@ products.forEach((productObj) => { // products: array --> from products.js
   `
   pageHTML += productHTML  
 })
-// document.body.innerHTML = pageHTML
 
 const productsGrid = document.querySelector('.products-grid');
 productsGrid.innerHTML = pageHTML;
@@ -63,13 +62,30 @@ const addToCartButtons = document.querySelectorAll('.js-add-to-cart-button');
 addToCartButtons.forEach((addToCartButton) => {
   addToCartButton.addEventListener('click', () => {
     //TODO: Add to cart button functionality
-    //TODO: check if product in cart already, else add new to cart
+    //TODO: update the quantity by 1 to the cart if item present, else add it to cart 
+
     // saving into data structure
     const productName = addToCartButton.dataset.productName
-    cart.push({
-      productName,
-      quantity: 1
+
+    let isInCart = false // flag
+    let matchingItem;
+    cart.forEach((item) => { // checking if the product already in the cart
+      const itemName = item.productName;      
+      // console.log(itemName);
+      if (productName === itemName) {
+        isInCart = true;
+        matchingItem = item;
+      }
     })
+    // console.log(isInCart);
+    if (!isInCart) {
+      cart.push({
+        productName,
+        quantity: 1
+      })      
+    } else {
+      matchingItem.quantity += 1;
+    }
     console.log(cart)
   })
 })
