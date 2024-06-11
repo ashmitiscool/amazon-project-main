@@ -1,6 +1,7 @@
+/* Setting HTML of the page */
 let pageHTML = ''
-products.forEach((productObj) => {
-  const productHTML = `
+products.forEach((productObj) => { // products: array --> from products.js 
+  const productHTML = /*html*/ `
   <div class="product-container">
     <div class="product-image-container">
       <img class="product-image"
@@ -45,7 +46,7 @@ products.forEach((productObj) => {
       Added
     </div>
 
-    <button class="add-to-cart-button button-primary">
+    <button class="add-to-cart-button button-primary js-add-to-cart-button" data-product-name="${productObj.name}">
       Add to Cart
     </button>
   </div>
@@ -56,3 +57,19 @@ products.forEach((productObj) => {
 
 const productsGrid = document.querySelector('.products-grid');
 productsGrid.innerHTML = pageHTML;
+
+// Add to Cart button working
+const addToCartButtons = document.querySelectorAll('.js-add-to-cart-button');
+addToCartButtons.forEach((addToCartButton) => {
+  addToCartButton.addEventListener('click', () => {
+    //TODO: Add to cart button functionality
+    //TODO: check if product in cart already, else add new to cart
+    // saving into data structure
+    const productName = addToCartButton.dataset.productName
+    cart.push({
+      productName,
+      quantity: 1
+    })
+    console.log(cart)
+  })
+})
