@@ -46,7 +46,7 @@ products.forEach((productObj) => { // products: array --> from products.js
       Added
     </div>
 
-    <button class="add-to-cart-button button-primary js-add-to-cart-button" data-product-name="${productObj.name}">
+    <button class="add-to-cart-button button-primary js-add-to-cart-button" data-product-name="${productObj.name}" data-product-id="${productObj.id}">
       Add to Cart
     </button>
   </div>
@@ -57,35 +57,40 @@ products.forEach((productObj) => { // products: array --> from products.js
 const productsGrid = document.querySelector('.products-grid');
 productsGrid.innerHTML = pageHTML;
 
+// TODO: Update the cart image to show the amount in cart when loading the page and when updating the cart
+let cartQuantity = 0;
+
 // Add to Cart button working
-const addToCartButtons = document.querySelectorAll('.js-add-to-cart-button');
-addToCartButtons.forEach((addToCartButton) => {
-  addToCartButton.addEventListener('click', () => {
-    //TODO: Add to cart button functionality
-    //TODO: update the quantity by 1 to the cart if item present, else add it to cart 
+function initAddToCartButton() { 
+  // only executed once
+  const addToCartButtons = document.querySelectorAll('.js-add-to-cart-button');
+  addToCartButtons.forEach((addToCartButton) => {
+    addToCartButton.addEventListener('click', () => {
+      // saving into data structure
+      const productName = addToCartButton.dataset.productName;
+      const productId = addToCartButton.dataset.productId;
 
-    // saving into data structure
-    const productName = addToCartButton.dataset.productName
-
-    let isInCart = false // flag
-    let matchingItem;
-    cart.forEach((item) => { // checking if the product already in the cart
-      const itemName = item.productName;      
-      // console.log(itemName);
-      if (productName === itemName) {
-        isInCart = true;
-        matchingItem = item;
+      let isInCart = false // flag
+      let matchingItem;
+      cart.forEach((item) => { // checking if the product already in the cart
+        const itemName = item.productName;
+        const itemId = item.productId;
+        
+        if (productId === itemId) {
+          isInCart = true;
+          matchingItem = item;        
+        }
+      })    
+      if (!isInCart) {
+        cart.push({
+          productId,
+          quantity: 1
+        })      
+      } else {
+        matchingItem.quantity += 1;
       }
+      console.log(cart)
     })
-    // console.log(isInCart);
-    if (!isInCart) {
-      cart.push({
-        productName,
-        quantity: 1
-      })      
-    } else {
-      matchingItem.quantity += 1;
-    }
-    console.log(cart)
   })
-})
+}
+initAddToCartButton();
