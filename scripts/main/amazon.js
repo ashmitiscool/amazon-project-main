@@ -57,10 +57,10 @@ products.forEach((productObj) => { // products: array --> from products.js
 const productsGrid = document.querySelector('.products-grid');
 productsGrid.innerHTML = pageHTML;
 
-console.log(getCartQuantity());
-
+showCartQuantity();
 
 // Add to Cart button working
+initAddToCartButton();
 function initAddToCartButton() { 
   // only executed once
   const addToCartButtons = document.querySelectorAll('.js-add-to-cart-button');
@@ -90,12 +90,11 @@ function initAddToCartButton() {
         matchingItem.quantity += 1;
       }
       console.log(cart)
-      const cartQuantity = getCartQuantity();
-      console.log(cartQuantity);
+      showCartQuantity();
     })
   })
 }
-initAddToCartButton();
+
 
 // TODO: Update the cart image to show the amount in cart when loading the page and when updating the cart
 function getCartQuantity() {
@@ -105,4 +104,9 @@ function getCartQuantity() {
     cartQuantity += productQuantity;    
   })
   return cartQuantity;
+}
+
+function showCartQuantity() {
+  const cartQuantityDiv = document.querySelector('.cart-quantity');
+  cartQuantityDiv.innerText = getCartQuantity();
 }
