@@ -2,10 +2,10 @@
 Structure like 
 array[
   obj{
-    productName:,
+    productId:,
     quantity:
   }
 ] 
 */
-let cart = []; 
+let cart = [];
 

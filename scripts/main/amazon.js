@@ -1,7 +1,6 @@
 /* Setting HTML of the page */
 let pageHTML = ''
 products.forEach((productObj, index) => { // products: array --> from products.js 
-  // TODO: Changing the quantity in the cart from the dropdown (to add more than 1 at once)
   const productHTML = /*html*/ `
   <div class="product-container">
     <div class="product-image-container">
@@ -65,8 +64,8 @@ initAddToCartButton();
 function initAddToCartButton() { 
   // only executed once
   const addToCartButtons = document.querySelectorAll('.js-add-to-cart-button');
-  addToCartButtons.forEach((addToCartButton) => {
-    addToCartButton.addEventListener('click', () => { // executed every time button clicked
+  addToCartButtons.forEach((addToCartButton, index) => {
+    addToCartButton.addEventListener('click', () => { // CNTXT: executed every time button clicked
       // saving into cart array
       const productName = addToCartButton.dataset.productName;
       const productId = addToCartButton.dataset.productId;
@@ -77,18 +76,23 @@ function initAddToCartButton() {
         const itemName = item.productName;
         const itemId = item.productId;
         
+        // checking if already in cart
         if (productId === itemId) {
           isInCart = true;
           matchingItem = item;        
         }
-      })    
+      })
+      const dropdown = document.querySelector(`.js-quantity-select${index}`);
+      const dropdownValue = Number(dropdown.value);  
+
+      // if not in cart
       if (!isInCart) {
         cart.push({
           productId,
-          quantity: 1
+          quantity: dropdownValue
         })      
-      } else {
-        matchingItem.quantity += 1;
+      } else { // if in cart
+        matchingItem.quantity += dropdownValue;
       }
       console.log(cart)
       showCartQuantity();
