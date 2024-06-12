@@ -1,6 +1,7 @@
 /* Setting HTML of the page */
 let pageHTML = ''
-products.forEach((productObj) => { // products: array --> from products.js 
+products.forEach((productObj, index) => { // products: array --> from products.js 
+  // TODO: Changing the quantity in the cart from the dropdown (to add more than 1 at once)
   const productHTML = /*html*/ `
   <div class="product-container">
     <div class="product-image-container">
@@ -25,7 +26,7 @@ products.forEach((productObj) => { // products: array --> from products.js
     </div>
 
     <div class="product-quantity-container">
-      <select>
+      <select class="quantity-select js-quantity-select${index}">
         <option selected value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -96,7 +97,6 @@ function initAddToCartButton() {
 }
 
 
-// TODO: Update the cart image to show the amount in cart when loading the page and when updating the cart
 function getCartQuantity() {
   let cartQuantity = 0;
   cart.forEach((productObj) => {
