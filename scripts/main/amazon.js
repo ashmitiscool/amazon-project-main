@@ -63,7 +63,7 @@ productsGrid.innerHTML = pageHTML;
 showCartQuantity();
 
 // Add to Cart button working
-let cartAddedId;
+let cartAddedIdObj = {};
 initAddToCartButton();
 function initAddToCartButton() {
   // only executed once
@@ -122,10 +122,12 @@ function showCartQuantity() {
   cartQuantityDiv.innerText = getCartQuantity();
 }
 
+// ! FIXME: When clearing timeout the previous product's prompt continues to display forever
 function displayCartAdded(index) {
   const addedToCartLabel = document.querySelector(`.js-added-to-cart${index}`);
-  // clearTimeout(cartAddedId);
-  cartAddedId = setTimeout(() => {
+  clearTimeout(cartAddedIdObj[`${index}`]);
+
+  cartAddedIdObj[`${index}`] = setTimeout(() => {
     addedToCartLabel.classList.remove("fullOpacity");
   }, 2000);
   addedToCartLabel.classList.add("fullOpacity");
