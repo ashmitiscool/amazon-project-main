@@ -1,6 +1,7 @@
 /* Setting HTML of the page */
-let pageHTML = ''
-products.forEach((productObj, index) => { // products: array --> from products.js 
+let pageHTML = "";
+products.forEach((productObj, index) => {
+  // products: array --> from products.js
   const productHTML = /*html*/ `
   <div class="product-container">
     <div class="product-image-container">
@@ -21,7 +22,7 @@ products.forEach((productObj, index) => { // products: array --> from products.j
     </div>
 
     <div class="product-price">
-      $${(productObj.priceCents/100).toFixed(2)}
+      $${(productObj.priceCents / 100).toFixed(2)}
     </div>
 
     <div class="product-quantity-container">
@@ -46,80 +47,86 @@ products.forEach((productObj, index) => { // products: array --> from products.j
       Added
     </div>
 
-    <button class="add-to-cart-button button-primary js-add-to-cart-button" data-product-name="${productObj.name}" data-product-id="${productObj.id}">
+    <button class="add-to-cart-button button-primary js-add-to-cart-button" data-product-name="${
+      productObj.name
+    }" data-product-id="${productObj.id}">
       Add to Cart
     </button>
   </div>
-  `
-  pageHTML += productHTML  
-})
+  `;
+  pageHTML += productHTML;
+});
 
-const productsGrid = document.querySelector('.products-grid');
+const productsGrid = document.querySelector(".products-grid");
 productsGrid.innerHTML = pageHTML;
 
 showCartQuantity();
 
 // Add to Cart button working
+let cartAddedId;
 initAddToCartButton();
-function initAddToCartButton() { 
+function initAddToCartButton() {
   // only executed once
-  const addToCartButtons = document.querySelectorAll('.js-add-to-cart-button');
+  const addToCartButtons = document.querySelectorAll(".js-add-to-cart-button");
   addToCartButtons.forEach((addToCartButton, index) => {
-    addToCartButton.addEventListener('click', () => { // CNTXT: executed every time button clicked
+    addToCartButton.addEventListener("click", () => {
+      // * CNTXT: executed every time button clicked
       // saving into cart array
       const productName = addToCartButton.dataset.productName;
       const productId = addToCartButton.dataset.productId;
 
-      let isInCart = false // flag
+      let isInCart = false; // flag
       let matchingItem;
-      cart.forEach((item) => { // checking if the product already in the cart
+      cart.forEach((item) => {
+        // checking if the product already in the cart
         const itemName = item.productName;
         const itemId = item.productId;
-        
+
         // checking if already in cart
         if (productId === itemId) {
           isInCart = true;
-          matchingItem = item;        
+          matchingItem = item;
         }
-      })
+      });
       const dropdown = document.querySelector(`.js-quantity-select${index}`);
-      const dropdownValue = Number(dropdown.value);  
+      const dropdownValue = Number(dropdown.value);
 
       // if not in cart
       if (!isInCart) {
         cart.push({
           productId,
-          quantity: dropdownValue
-        })      
-      } else { // if in cart
+          quantity: dropdownValue,
+        });
+      } else {
+        // if in cart
         matchingItem.quantity += dropdownValue;
       }
-      console.log(cart)
+      console.log(cart);
       showCartQuantity();
       displayCartAdded(index);
-    })
-  })
+    });
+  });
 }
-
 
 function getCartQuantity() {
   let cartQuantity = 0;
   cart.forEach((productObj) => {
     const productQuantity = productObj.quantity;
-    cartQuantity += productQuantity;    
-  })
+    cartQuantity += productQuantity;
+  });
   return cartQuantity;
 }
 
 function showCartQuantity() {
-  const cartQuantityDiv = document.querySelector('.cart-quantity');
+  const cartQuantityDiv = document.querySelector(".cart-quantity");
   cartQuantityDiv.innerText = getCartQuantity();
 }
 
 function displayCartAdded(index) {
   const addedToCartLabel = document.querySelector(`.js-added-to-cart${index}`);
-  setTimeout(() => {
-    addedToCartLabel.classList.remove('fullOpacity');
+  // clearTimeout(cartAddedId);
+  cartAddedId = setTimeout(() => {
+    addedToCartLabel.classList.remove("fullOpacity");
   }, 2000);
-  addedToCartLabel.classList.add('fullOpacity');
+  addedToCartLabel.classList.add("fullOpacity");
 }
