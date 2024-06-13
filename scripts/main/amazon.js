@@ -1,4 +1,5 @@
-/* Setting HTML of the page */
+import { cart } from "../../data/cart.js";
+/** Setting HTML of the page */
 let pageHTML = "";
 products.forEach((productObj, index) => {
   // products: array --> from products.js
@@ -122,7 +123,6 @@ function showCartQuantity() {
   cartQuantityDiv.innerText = getCartQuantity();
 }
 
-// ! FIXME: When clearing timeout the previous product's prompt continues to display forever
 function displayCartAdded(index) {
   const addedToCartLabel = document.querySelector(`.js-added-to-cart${index}`);
   clearTimeout(cartAddedIdObj[`${index}`]);

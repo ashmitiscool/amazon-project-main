@@ -7,5 +7,4 @@ array[
   }
 ] 
 */
-let cart = [];
-
+export let cart = [];
