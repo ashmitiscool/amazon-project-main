@@ -1,10 +1,11 @@
 import { cart } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 /** Setting HTML of the page */
-let pageHTML = "";
-products.forEach((productObj, index) => {
-  // products: array --> from products.js
-  const productHTML = /*html*/ `
+function setHTML() {
+  let pageHTML = "";
+  products.forEach((productObj, index) => {
+    // products: array --> from products.js
+    const productHTML = /*html*/ `
   <div class="product-container">
     <div class="product-image-container">
       <img class="product-image"
@@ -56,17 +57,22 @@ products.forEach((productObj, index) => {
     </button>
   </div>
   `;
-  pageHTML += productHTML;
-});
+    pageHTML += productHTML;
+  });
 
-const productsGrid = document.querySelector(".products-grid");
-productsGrid.innerHTML = pageHTML;
+  const productsGrid = document.querySelector(".products-grid");
+  productsGrid.innerHTML = pageHTML;
+}
+setHTML();
 
+function showCartQuantity() {
+  const cartQuantityDiv = document.querySelector(".cart-quantity");
+  cartQuantityDiv.innerText = getCartQuantity();
+}
 showCartQuantity();
 
 // Add to Cart button working
 let cartAddedIdObj = {};
-initAddToCartButton();
 function initAddToCartButton() {
   // only executed once
   const addToCartButtons = document.querySelectorAll(".js-add-to-cart-button");
@@ -109,6 +115,7 @@ function initAddToCartButton() {
     });
   });
 }
+initAddToCartButton();
 
 function getCartQuantity() {
   let cartQuantity = 0;
@@ -117,11 +124,6 @@ function getCartQuantity() {
     cartQuantity += productQuantity;
   });
   return cartQuantity;
-}
-
-function showCartQuantity() {
-  const cartQuantityDiv = document.querySelector(".cart-quantity");
-  cartQuantityDiv.innerText = getCartQuantity();
 }
 
 function displayCartAdded(index) {
