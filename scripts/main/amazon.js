@@ -1,4 +1,5 @@
 import { cart } from "../../data/cart.js";
+import { products } from "../../data/products.js";
 /** Setting HTML of the page */
 let pageHTML = "";
 products.forEach((productObj, index) => {
