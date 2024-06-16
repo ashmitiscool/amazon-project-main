@@ -21,8 +21,11 @@ export function getCartQuantity() {
   return cartQuantity;
 }
 
-function addToCart() {
-  // cntxt: executed every time button clicked
+// cntxt: executed every time 'add to cart' button clicked
+// format -> addToCartButton: Button element on amazon home page
+// format -> index: index of the button element ( 0 at top left )
+// Extracts data from amazon homepage
+export function addToCart(addToCartButton, index) {
   const productName = addToCartButton.dataset.productName;
   const productId = addToCartButton.dataset.productId;
 

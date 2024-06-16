@@ -1,7 +1,7 @@
-// docstr: Main Amazon Home Page JS Code
-
-import { cart, getCartQuantity } from "../../data/cart.js";
+import { cart, getCartQuantity, addToCart } from "../../data/cart.js";
 import { products } from "../../data/products.js";
+
+// docstr: Main Amazon Home Page JS Code
 
 // cntxt: setting HTML of displaying products on page
 function setHTML() {
@@ -68,7 +68,7 @@ function setHTML() {
 }
 setHTML();
 
-function showCartQuantity() {
+export function showCartQuantity() {
   const cartQuantityDiv = document.querySelector(".cart-quantity");
   cartQuantityDiv.innerText = getCartQuantity();
 }
@@ -84,52 +84,14 @@ function initAddToCartButton() {
   const addToCartButtons = document.querySelectorAll(".js-add-to-cart-button");
   addToCartButtons.forEach((addToCartButton, index) => {
     addToCartButton.addEventListener("click", () => {
-      // cntxt: executed every time button clicked
-      const productName = addToCartButton.dataset.productName;
-      const productId = addToCartButton.dataset.productId;
-
-      let isInCart = false; // flag to check if in cart
-      let matchingItem;
-
-      // @s checking if already in cart
-      // iterating through all items in cart
-      // format -> cart: array of cart product objects from cart.js
-      cart.forEach((cartItem) => {
-        const itemName = cartItem.productName;
-        const itemId = cartItem.productId;
-
-        // checking if already in cart
-        if (productId === itemId) {
-          isInCart = true;
-          matchingItem = cartItem;
-        }
-      });
-
-      const dropdown = document.querySelector(`.js-quantity-select${index}`);
-      const dropdownValue = Number(dropdown.value);
-
-      // @s Adding to cart logic
-      // saving into cart array
-
-      // if not in cart
-      if (!isInCart) {
-        cart.push({
-          productId,
-          quantity: dropdownValue,
-        });
-      } else {
-        // if in cart
-        matchingItem.quantity += dropdownValue;
-      }
-      console.log(cart);
-      showCartQuantity();
-      displayCartAdded(index);
+      addToCart(addToCartButton, index);
     });
   });
 }
 initAddToCartButton();
 
-function displayCartAdded(index) {
+// cntxt: displays the 'Cart Added' text whenever any product added to cart by pressing the addToCart button
+export function displayCartAdded(index) {
   const addedToCartLabel = document.querySelector(`.js-added-to-cart${index}`);
   clearTimeout(cartAddedIdObj[`${index}`]);
 
