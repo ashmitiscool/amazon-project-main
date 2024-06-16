@@ -74,7 +74,7 @@ function showCartQuantity() {
 }
 showCartQuantity();
 
-// @ Initializing Add to Cart button
+// @s Initializing Add to Cart button
 let cartAddedIdObj = {};
 // cntxt ^ Stores IDs of the timeouts in displayCartAdded()
 // format -> obj{ index(int): timeOutId }
@@ -85,17 +85,16 @@ function initAddToCartButton() {
   addToCartButtons.forEach((addToCartButton, index) => {
     addToCartButton.addEventListener("click", () => {
       // cntxt: executed every time button clicked
-      // saving into cart array
       const productName = addToCartButton.dataset.productName;
       const productId = addToCartButton.dataset.productId;
 
       let isInCart = false; // flag to check if in cart
       let matchingItem;
 
+      // @s checking if already in cart
       // iterating through all items in cart
       // format -> cart: array of cart product objects from cart.js
       cart.forEach((cartItem) => {
-        // checking if the product already in the cart
         const itemName = cartItem.productName;
         const itemId = cartItem.productId;
 
@@ -105,8 +104,12 @@ function initAddToCartButton() {
           matchingItem = cartItem;
         }
       });
+
       const dropdown = document.querySelector(`.js-quantity-select${index}`);
       const dropdownValue = Number(dropdown.value);
+
+      // @s Adding to cart logic
+      // saving into cart array
 
       // if not in cart
       if (!isInCart) {
