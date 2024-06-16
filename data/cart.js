@@ -1,5 +1,3 @@
-import { showCartQuantity, displayCartAdded } from "../scripts/main/amazon.js";
-
 // format
 /* Cart DOCUMENTATION
 Structure like 
@@ -62,7 +60,4 @@ export function addToCart(addToCartButton, index) {
     // if in cart
     matchingItem.quantity += dropdownValue;
   }
-  console.log(cart);
-  showCartQuantity();
-  displayCartAdded(index);
 }

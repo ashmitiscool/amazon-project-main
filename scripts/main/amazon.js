@@ -85,6 +85,9 @@ function initAddToCartButton() {
   addToCartButtons.forEach((addToCartButton, index) => {
     addToCartButton.addEventListener("click", () => {
       addToCart(addToCartButton, index);
+      console.log(cart);
+      showCartQuantity();
+      displayCartAdded(index);
     });
   });
 }
