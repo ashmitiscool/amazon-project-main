@@ -1,3 +1,5 @@
+// docstr: Code relating to manipulating data and retrieving data from cart
+
 // format
 /* Cart DOCUMENTATION
 Structure like 

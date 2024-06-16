@@ -84,6 +84,7 @@ function initAddToCartButton() {
   const addToCartButtons = document.querySelectorAll(".js-add-to-cart-button");
   addToCartButtons.forEach((addToCartButton, index) => {
     addToCartButton.addEventListener("click", () => {
+      // button onclick function
       addToCart(addToCartButton, index);
       console.log(cart);
       showCartQuantity();
