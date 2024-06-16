@@ -10,9 +10,22 @@ console.log(cart);
 
 function displayOrderSummary() {
   let orderSummaryHTML = "";
+  // cntxt: cartItem for item in cart, product for item in products
   cart.forEach((cartItem) => {
     // todo: iterate through products array and extract the object which has the id same as the cartItem
     console.log(cartItem);
+    let matchingItem; // matching item in products array
+    const cartItemId = cartItem.productId;
+
+    products.forEach((product) => {
+      const productId = product.id;
+      if (productId === cartItemId) {
+        matchingItem = product;
+      }
+    });
+    console.log(`Matching Item is`);
+    console.log(matchingItem);
+
     const html = /*html*/ `
     <div class="cart-item-container">
       <div class="delivery-date">
