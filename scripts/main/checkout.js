@@ -34,14 +34,14 @@ function displayOrderSummary() {
 
       <div class="cart-item-details-grid">
         <img class="product-image"
-          src="images/products/athletic-cotton-socks-6-pairs.jpg">
+          src="${matchingItem.image}">
 
         <div class="cart-item-details">
           <div class="product-name">
-            Black and Gray Athletic Cotton Socks - 6 Pairs
+            ${matchingItem.name}
           </div>
           <div class="product-price">
-            $10.90
+            $${matchingItem.priceCents / 100}
           </div>
           <div class="product-quantity">
             <span>
