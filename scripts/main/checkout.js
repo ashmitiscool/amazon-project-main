@@ -1,15 +1,17 @@
 import { cart } from "../../data/cart.js";
 import { products } from "../../data/products.js";
+import { centsToDollars } from "../subset/global_funcs.js";
 
 // docstr: JS for checkout page
 
 // @s generating html on the page
-// todo: extract the data from the cart and generate the html on the page
+// todo: generate HTML of payment summary
+// todo: generate HTML of delivery date
 // issue: cart loading default values from cart instead of products added from amazon.js
 console.log(cart);
 
 function displayOrderSummary() {
-  let orderSummaryHTML = "";
+  let orderSummaryHTML = ""; // string to store all the html of order summary
   // cntxt: cartItem for item in cart, product for item in products
   cart.forEach((cartItem) => {
     // todo: iterate through products array and extract the object which has the id same as the cartItem
@@ -25,6 +27,7 @@ function displayOrderSummary() {
     });
     console.log(`Matching Item is`);
     console.log(matchingItem);
+    // with matching item, we can access anything of the item through products array
 
     const html = /*html*/ `
     <div class="cart-item-container">
@@ -41,7 +44,7 @@ function displayOrderSummary() {
             ${matchingItem.name}
           </div>
           <div class="product-price">
-            $${matchingItem.priceCents / 100}
+            $${centsToDollars(matchingItem.priceCents)}
           </div>
           <div class="product-quantity">
             <span>
@@ -63,7 +66,7 @@ function displayOrderSummary() {
           <div class="delivery-option">
             <input type="radio" checked
               class="delivery-option-input"
-              name="delivery-option-1">
+              name="delivery-option-${cartItem.productId}">
             <div>
               <div class="delivery-option-date">
                 Tuesday, June 21
@@ -76,7 +79,7 @@ function displayOrderSummary() {
           <div class="delivery-option">
             <input type="radio"
               class="delivery-option-input"
-              name="delivery-option-1">
+              name="delivery-option-${cartItem.productId}">
             <div>
               <div class="delivery-option-date">
                 Wednesday, June 15
@@ -89,7 +92,7 @@ function displayOrderSummary() {
           <div class="delivery-option">
             <input type="radio"
               class="delivery-option-input"
-              name="delivery-option-1">
+              name="delivery-option-${cartItem.productId}">
             <div>
               <div class="delivery-option-date">
                 Monday, June 13
@@ -105,7 +108,7 @@ function displayOrderSummary() {
     `;
     orderSummaryHTML += html;
   });
-  const orderSummaryDiv = document.querySelector(".order-summary");
+  const orderSummaryDiv = document.querySelector(".js-order-summary");
   orderSummaryDiv.innerHTML = orderSummaryHTML;
 }
 displayOrderSummary();

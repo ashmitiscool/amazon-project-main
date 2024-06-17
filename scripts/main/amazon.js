@@ -1,5 +1,6 @@
 import { cart, getCartQuantity, addToCart } from "../../data/cart.js";
 import { products } from "../../data/products.js";
+import { centsToDollars } from "../subset/global_funcs.js";
 
 // docstr: Main Amazon Home Page JS Code
 
@@ -28,7 +29,7 @@ function setHTML() {
       </div>
 
       <div class="product-price">
-        $${(productObj.priceCents / 100).toFixed(2)}
+        $${centsToDollars(productObj.priceCents)}
       </div>
 
       <div class="product-quantity-container">
