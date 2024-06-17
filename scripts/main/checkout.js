@@ -1,4 +1,4 @@
-import { cart } from "../../data/cart.js";
+import { cart as exportedCart } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { centsToDollars } from "../subset/global_funcs.js";
 
@@ -8,9 +8,12 @@ import { centsToDollars } from "../subset/global_funcs.js";
 // todo: generate HTML of payment summary
 // todo: generate HTML of delivery date
 // issue: cart loading default values from cart instead of products added from amazon.js
-console.log(cart);
 
-function displayOrderSummary() {
+// * Generates HTML and underlying code of buttons in the Order Summary
+// ( not the payment one though that is named as Order summary on the page )
+function displayOrderSummary(cart) {
+  console.log("Cart is gg :");
+  console.log(cart);
   let orderSummaryHTML = ""; // string to store all the html of order summary
   // cntxt: cartItem for item in cart, product for item in products
   cart.forEach((cartItem) => {
@@ -30,7 +33,7 @@ function displayOrderSummary() {
     // with matching item, we can access anything of the item through products array
 
     const html = /*html*/ `
-    <div class="cart-item-container">
+    <div class="cart-item-container js-cart-item-container${cartItemId}">
       <div class="delivery-date">
         Delivery date: Tuesday, June 21
       </div>
@@ -50,10 +53,14 @@ function displayOrderSummary() {
             <span>
               Quantity: <span class="quantity-label">${cartItem.quantity}</span>
             </span>
-            <span class="update-quantity-link link-primary">
+            <span class="update-quantity-link link-primary js-update-cart${
+              cartItem.productId
+            }">
               Update
             </span>
-            <span class="delete-quantity-link link-primary">
+            <span class="delete-quantity-link link-primary js-delete-from-cart${
+              cartItem.productId
+            }">
               Delete
             </span>
           </div>
@@ -110,5 +117,54 @@ function displayOrderSummary() {
   });
   const orderSummaryDiv = document.querySelector(".js-order-summary");
   orderSummaryDiv.innerHTML = orderSummaryHTML;
+
+  // todo: add event listener to all update and delete buttons on the order summary
+  // adding event listeners / functionality to update and delete buttons
+  cart.forEach((cartItem) => {
+    const cartItemId = cartItem.productId;
+    const updateButton = document.querySelector(`.js-update-cart${cartItemId}`);
+    const deleteButton = document.querySelector(
+      `.js-delete-from-cart${cartItemId}`
+    );
+    console.log(`updateButton is`);
+    console.log(updateButton);
+    console.log(`deleteButton is`);
+    console.log(deleteButton);
+    // update button functioning
+    updateButton.addEventListener("click", () => {
+      /*toBeImplemented*/
+      updateButtonWork();
+    });
+    // update button functioning
+    deleteButton.addEventListener("click", () => {
+      /*toBeImplemented*/
+      deleteButtonWork(cartItemId);
+    });
+  });
 }
-displayOrderSummary();
+displayOrderSummary(exportedCart);
+
+function updateButtonWork() {}
+
+// in the starting of the program it will be empty
+let newCart = [];
+function deleteButtonWork(productId) {
+  // ! Below few commented lines of code will NOT delete the product from the cart, it will just remove it from the page
+  // const cartItemContainer = document.querySelector(
+  //   `.js-cart-item-container${productId}`
+  // );
+  // cartItemContainer.remove();
+
+  if (newCart.length === 0) {
+    newCart = JSON.parse(JSON.stringify(exportedCart)); // hard copy of exported cart first time executed
+  }
+  let deletedCart = [];
+  newCart.forEach((cartItem) => {
+    if (cartItem.productId != productId) {
+      deletedCart.push(cartItem);
+    }
+  });
+  newCart = JSON.parse(JSON.stringify(deletedCart));
+  // ^ hard copy of deletedCart
+  displayOrderSummary(newCart);
+}
