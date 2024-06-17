@@ -1,8 +1,10 @@
-import { cart as exportedCart } from "../../data/cart.js";
+import { cart as exportedCart, getCartQuantity } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { centsToDollars } from "../subset/global_funcs.js";
 
 // docstr: JS for checkout page
+
+showNumInCart(exportedCart);
 
 // @s generating html on the page
 // todo: generate HTML of payment summary
@@ -141,6 +143,8 @@ function displayOrderSummary(cart) {
       deleteButtonWork(cartItemId);
     });
   });
+  // changing the checkout item text whenever this function called
+  showNumInCart(cart);
 }
 displayOrderSummary(exportedCart);
 
@@ -167,4 +171,11 @@ function deleteButtonWork(productId) {
   newCart = JSON.parse(JSON.stringify(deletedCart));
   // ^ hard copy of deletedCart
   displayOrderSummary(newCart);
+}
+
+// cntxt: Displays the number of items beside the 'checkout' text on the top bar
+// * (does not return the number of elements in cart, that is getCartQuantity() from cart.js)
+function showNumInCart(cart) {
+  const checkOutNumOfItems = document.querySelector(".return-to-home-link");
+  checkOutNumOfItems.innerText = `${getCartQuantity(cart)} items`;
 }

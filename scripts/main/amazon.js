@@ -71,7 +71,7 @@ setHTML();
 
 export function showCartQuantity() {
   const cartQuantityDiv = document.querySelector(".cart-quantity");
-  cartQuantityDiv.innerText = getCartQuantity();
+  cartQuantityDiv.innerText = getCartQuantity(cart);
 }
 showCartQuantity();
 

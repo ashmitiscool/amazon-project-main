@@ -22,7 +22,7 @@ export let cart = [
   },
 ];
 
-export function getCartQuantity() {
+export function getCartQuantity(cart) {
   let cartQuantity = 0;
   cart.forEach((productObj) => {
     const productQuantity = productObj.quantity;
