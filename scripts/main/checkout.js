@@ -1,6 +1,6 @@
 import { cart as exportedCart, getCartQuantity } from "../../data/cart.js";
 import { products } from "../../data/products.js";
-import { centsToDollars } from "../subset/global_funcs.js";
+import { centsToDollars, hardCopy } from "../subset/global_funcs.js";
 
 // docstr: JS for checkout page
 
@@ -19,7 +19,6 @@ function displayOrderSummary(cart) {
   let orderSummaryHTML = ""; // string to store all the html of order summary
   // cntxt: cartItem for item in cart, product for item in products
   cart.forEach((cartItem) => {
-    // todo: iterate through products array and extract the object which has the id same as the cartItem
     console.log(cartItem);
     let matchingItem; // matching item in products array
     const cartItemId = cartItem.productId;
@@ -34,6 +33,7 @@ function displayOrderSummary(cart) {
     console.log(matchingItem);
     // with matching item, we can access anything of the item through products array
 
+    // @s HTML Code:
     const html = /*html*/ `
     <div class="cart-item-container js-cart-item-container${cartItemId}">
       <div class="delivery-date">
@@ -120,8 +120,7 @@ function displayOrderSummary(cart) {
   const orderSummaryDiv = document.querySelector(".js-order-summary");
   orderSummaryDiv.innerHTML = orderSummaryHTML;
 
-  // todo: add event listener to all update and delete buttons on the order summary
-  // adding event listeners / functionality to update and delete buttons
+  // @s adding event listeners / functionality to update and delete buttons
   cart.forEach((cartItem) => {
     const cartItemId = cartItem.productId;
     const updateButton = document.querySelector(`.js-update-cart${cartItemId}`);
@@ -148,10 +147,12 @@ function displayOrderSummary(cart) {
 }
 displayOrderSummary(exportedCart);
 
-function updateButtonWork() {}
+function updateButtonWork() {
+  // ! To be implemented
+}
 
 // in the starting of the program it will be empty
-let newCart = [];
+let newCart = []; // stores the cart, we are not using original cart as that cannot be changed
 function deleteButtonWork(productId) {
   // ! Below few commented lines of code will NOT delete the product from the cart, it will just remove it from the page
   // const cartItemContainer = document.querySelector(
@@ -160,15 +161,16 @@ function deleteButtonWork(productId) {
   // cartItemContainer.remove();
 
   if (newCart.length === 0) {
-    newCart = JSON.parse(JSON.stringify(exportedCart)); // hard copy of exported cart first time executed
+    newCart = hardCopy(exportedCart); // hard copy of exported cart first time executed
   }
-  let deletedCart = [];
+  let deletedCart = []; // cart which does not contain the deleted item (temporary use)
+  // @s adding items to deletedCart
   newCart.forEach((cartItem) => {
     if (cartItem.productId != productId) {
       deletedCart.push(cartItem);
     }
   });
-  newCart = JSON.parse(JSON.stringify(deletedCart));
+  newCart = hardCopy(deletedCart);
   // ^ hard copy of deletedCart
   displayOrderSummary(newCart);
 }
@@ -177,5 +179,10 @@ function deleteButtonWork(productId) {
 // * (does not return the number of elements in cart, that is getCartQuantity() from cart.js)
 function showNumInCart(cart) {
   const checkOutNumOfItems = document.querySelector(".return-to-home-link");
-  checkOutNumOfItems.innerText = `${getCartQuantity(cart)} items`;
+  const cartQuantity = getCartQuantity(cart);
+  if (cartQuantity === 1) {
+    checkOutNumOfItems.innerText = `${getCartQuantity(cart)} item`;
+  } else {
+    checkOutNumOfItems.innerText = `${getCartQuantity(cart)} items`;
+  }
 }
