@@ -1,4 +1,8 @@
-import { cart as exportedCart, getCartQuantity } from "../../data/cart.js";
+import {
+  cart as exportedCart,
+  getCartQuantity,
+  deleteFromCart,
+} from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { centsToDollars, hardCopy } from "../subset/global_funcs.js";
 
@@ -138,7 +142,8 @@ function displayOrderSummary(cart) {
     });
     // @s delete button functioning
     deleteButton.addEventListener("click", () => {
-      deleteButtonWork(cartItemId);
+      deleteFromCart(cartItemId);
+      displayOrderSummary(exportedCart);
     });
   });
   // changing the checkout item text whenever this function called
@@ -148,24 +153,6 @@ displayOrderSummary(exportedCart);
 
 function updateButtonWork() {
   // ! To be implemented
-}
-
-// in the starting of the program it will be empty
-let newCart = []; // stores the cart, we are not using original cart as that cannot be changed
-function deleteButtonWork(productId) {
-  if (newCart.length === 0) {
-    newCart = hardCopy(exportedCart); // hard copy of exported cart first time executed
-  }
-  let deletedCart = []; // cart which does not contain the deleted item (temporary use)
-  // @s adding items to deletedCart
-  newCart.forEach((cartItem) => {
-    if (cartItem.productId != productId) {
-      deletedCart.push(cartItem);
-    }
-  });
-  newCart = hardCopy(deletedCart);
-  // ^ hard copy of deletedCart
-  displayOrderSummary(newCart);
 }
 
 // cntxt: Displays the number of items beside the 'checkout' text on the top bar

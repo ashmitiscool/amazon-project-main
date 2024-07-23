@@ -1,5 +1,7 @@
 // docstr: Code relating to manipulating data and retrieving data from cart
 
+import { hardCopy } from "../scripts/subset/global_funcs.js";
+
 // format
 /* Cart DOCUMENTATION
 Structure like 
@@ -72,4 +74,16 @@ export function addToCart(addToCartButton, index) {
     // if in cart
     matchingItem.quantity += dropdownValue;
   }
+}
+
+export function deleteFromCart(productId) {
+  let deletedCart = []; // cart which does not contain the deleted item (temporary use)
+  // @s adding items to deletedCart
+  cart.forEach((cartItem) => {
+    if (cartItem.productId != productId) {
+      deletedCart.push(cartItem);
+    }
+  });
+  cart = hardCopy(deletedCart);
+  // ^ hard copy of deletedCart
 }
