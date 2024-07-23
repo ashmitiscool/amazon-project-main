@@ -160,10 +160,10 @@ function updateButtonWork() {
 // * (does not return the number of elements in cart, that is getCartQuantity() from cart.js)
 function showNumInCart() {
   const checkOutNumOfItems = document.querySelector(".return-to-home-link");
-  const cartQuantity = getCartQuantity(exportedCart);
+  const cartQuantity = getCartQuantity();
   if (cartQuantity === 1) {
-    checkOutNumOfItems.innerText = `${getCartQuantity(exportedCart)} item`;
+    checkOutNumOfItems.innerText = `${getCartQuantity()} item`;
   } else {
-    checkOutNumOfItems.innerText = `${getCartQuantity(exportedCart)} items`;
+    checkOutNumOfItems.innerText = `${getCartQuantity()} items`;
   }
 }
