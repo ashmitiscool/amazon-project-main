@@ -13,16 +13,17 @@ showNumInCart(exportedCart);
 // @s generating html on the page
 // todo: generate HTML of payment summary
 // todo: generate HTML of delivery date
+// todo: remove the cart parameter from the functions, they all should refer to exportedCart
 // issue: cart loading default values from cart instead of products added from amazon.js
 
 // * Generates HTML and underlying code of buttons in the Order Summary
 // ( not the payment one though that is named as Order summary on the page )
-function displayOrderSummary(cart) {
+function displayOrderSummary() {
   console.log("Cart is gg :");
-  console.log(cart);
+  console.log(exportedCart);
   let orderSummaryHTML = ""; // string to store all the html of order summary
-  // cntxt: cartItem for item in cart, product for item in products
-  cart.forEach((cartItem) => {
+  // cntxt: cartItem for item in cart, product for product in products
+  exportedCart.forEach((cartItem) => {
     console.log(cartItem);
     let matchingItem; // matching item in products array
     const cartItemId = cartItem.productId;
@@ -125,7 +126,7 @@ function displayOrderSummary(cart) {
   orderSummaryDiv.innerHTML = orderSummaryHTML;
 
   // @s adding event listeners / functionality to update and delete buttons
-  cart.forEach((cartItem) => {
+  exportedCart.forEach((cartItem) => {
     const cartItemId = cartItem.productId;
     const updateButton = document.querySelector(`.js-update-cart${cartItemId}`);
     const deleteButton = document.querySelector(
@@ -143,13 +144,13 @@ function displayOrderSummary(cart) {
     // @s delete button functioning
     deleteButton.addEventListener("click", () => {
       deleteFromCart(cartItemId);
-      displayOrderSummary(exportedCart);
+      displayOrderSummary();
     });
   });
   // changing the checkout item text whenever this function called
-  showNumInCart(cart);
+  showNumInCart(exportedCart);
 }
-displayOrderSummary(exportedCart);
+displayOrderSummary();
 
 function updateButtonWork() {
   // ! To be implemented
@@ -157,12 +158,12 @@ function updateButtonWork() {
 
 // cntxt: Displays the number of items beside the 'checkout' text on the top bar
 // * (does not return the number of elements in cart, that is getCartQuantity() from cart.js)
-function showNumInCart(cart) {
+function showNumInCart() {
   const checkOutNumOfItems = document.querySelector(".return-to-home-link");
-  const cartQuantity = getCartQuantity(cart);
+  const cartQuantity = getCartQuantity(exportedCart);
   if (cartQuantity === 1) {
-    checkOutNumOfItems.innerText = `${getCartQuantity(cart)} item`;
+    checkOutNumOfItems.innerText = `${getCartQuantity(exportedCart)} item`;
   } else {
-    checkOutNumOfItems.innerText = `${getCartQuantity(cart)} items`;
+    checkOutNumOfItems.innerText = `${getCartQuantity(exportedCart)} items`;
   }
 }
