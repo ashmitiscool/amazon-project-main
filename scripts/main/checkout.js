@@ -131,14 +131,13 @@ function displayOrderSummary(cart) {
     console.log(updateButton);
     console.log(`deleteButton is`);
     console.log(deleteButton);
-    // update button functioning
+    // @s update button functioning
     updateButton.addEventListener("click", () => {
       /*toBeImplemented*/
       updateButtonWork();
     });
-    // update button functioning
+    // @s delete button functioning
     deleteButton.addEventListener("click", () => {
-      /*toBeImplemented*/
       deleteButtonWork(cartItemId);
     });
   });
@@ -154,12 +153,6 @@ function updateButtonWork() {
 // in the starting of the program it will be empty
 let newCart = []; // stores the cart, we are not using original cart as that cannot be changed
 function deleteButtonWork(productId) {
-  // ! Below few commented lines of code will NOT delete the product from the cart, it will just remove it from the page
-  // const cartItemContainer = document.querySelector(
-  //   `.js-cart-item-container${productId}`
-  // );
-  // cartItemContainer.remove();
-
   if (newCart.length === 0) {
     newCart = hardCopy(exportedCart); // hard copy of exported cart first time executed
   }
