@@ -13,7 +13,7 @@ array[
 ] 
 */
 // temporarily adding default values to the cart just for development of checkout.js
-export let cart = [
+export let cart = JSON.parse(localStorage.getItem("cart")) || [
   {
     productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
     quantity: 2,
@@ -39,7 +39,7 @@ export function getCartQuantity() {
 // Extracts data from amazon homepage
 export function addToCart(addToCartButton, index) {
   const productName = addToCartButton.dataset.productName;
-  const productId = addToCartButton.dataset.productId;
+  const productId = addToCartButton.dataset.productId; // ID of the product which 'Add to Cart' button is pressed (not necessarily in cart)
 
   let isInCart = false; // flag to check if in cart
   let matchingItem;
@@ -49,7 +49,7 @@ export function addToCart(addToCartButton, index) {
   // format -> cart: array of cart product objects from cart.js
   cart.forEach((cartItem) => {
     const itemName = cartItem.productName;
-    const itemId = cartItem.productId;
+    const itemId = cartItem.productId; // ID of the product iterable in the cart
 
     // checking if already in cart
     if (productId === itemId) {
@@ -74,6 +74,7 @@ export function addToCart(addToCartButton, index) {
     // if in cart
     matchingItem.quantity += dropdownValue;
   }
+  saveCartInStorage();
 }
 
 export function deleteFromCart(productId) {
@@ -86,4 +87,9 @@ export function deleteFromCart(productId) {
   });
   cart = hardCopy(deletedCart);
   // ^ hard copy of deletedCart
+  saveCartInStorage();
+}
+
+function saveCartInStorage() {
+  localStorage.setItem("cart", JSON.stringify(cart));
 }

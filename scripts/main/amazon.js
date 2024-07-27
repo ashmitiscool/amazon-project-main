@@ -69,7 +69,7 @@ function setHTML() {
 }
 setHTML();
 
-export function showCartQuantity() {
+function showCartQuantity() {
   const cartQuantityDiv = document.querySelector(".cart-quantity");
   cartQuantityDiv.innerText = getCartQuantity();
 }

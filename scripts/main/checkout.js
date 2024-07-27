@@ -4,7 +4,7 @@ import {
   deleteFromCart,
 } from "../../data/cart.js";
 import { products } from "../../data/products.js";
-import { centsToDollars, hardCopy } from "../subset/global_funcs.js";
+import { centsToDollars } from "../subset/global_funcs.js";
 
 // docstr: JS for checkout page
 
