@@ -58,13 +58,18 @@ function displayOrderSummary() {
           </div>
           <div class="product-quantity">
             <span>
-              Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+              Quantity: <span class="quantity-label js-quantity-label-${
+                matchingItem.id
+              }">${cartItem.quantity}</span>
             </span>
             <span class="update-quantity-link link-primary js-update-cart${
               cartItem.productId
             }">
               Update
             </span>
+            <div style="display: inline-block;" class="save-quantity-div-${
+              cartItem.productId
+            }"></div>
             <span class="delete-quantity-link link-primary js-delete-from-cart${
               cartItem.productId
             }">
@@ -132,14 +137,10 @@ function displayOrderSummary() {
     const deleteButton = document.querySelector(
       `.js-delete-from-cart${cartItemId}`
     );
-    console.log(`updateButton is`);
-    console.log(updateButton);
-    console.log(`deleteButton is`);
-    console.log(deleteButton);
     // @s update button functioning
     updateButton.addEventListener("click", () => {
-      /*toBeImplemented*/
-      updateButtonWork();
+      console.log(`Prod Id is ${cartItemId}`);
+      updateButtonWork(cartItemId);
     });
     // @s delete button functioning
     deleteButton.addEventListener("click", () => {
@@ -152,8 +153,30 @@ function displayOrderSummary() {
 }
 displayOrderSummary();
 
-function updateButtonWork() {
-  // ! To be implemented
+function updateButtonWork(id) {
+  console.log(`id got is ${id}`);
+  const quantityLabel = document.querySelector(`.js-quantity-label-${id}`);
+  // console.log(quantityLabel.innerText);
+  const prevQuantity = quantityLabel.innerText; // * quantity before changing
+  quantityLabel.innerText = "";
+  // * Removing the update link
+  document.querySelector(`.js-update-cart${id}`).remove();
+  const saveDiv = document.querySelector(`.save-quantity-div-${id}`);
+  // console.log(updateLink);
+  saveDiv.innerHTML = /*html*/ `
+    <input class="quantity-input js-quantity-input-${id}" placeholder="${prevQuantity}">
+    <span class='save-quantity-link-${id} link-primary'>Save<span>
+  `;
+  // @s Event Listener for save link of product of that specific id
+  const saveLink = document.querySelector(`.save-quantity-link-${id}`);
+  console.log(saveLink);
+  saveLink.addEventListener("click", () => {
+    saveNewQuantity();
+  });
+}
+
+function saveNewQuantity() {
+  console.log("Hello");
 }
 
 // cntxt: Displays the number of items beside the 'checkout' text on the top bar
