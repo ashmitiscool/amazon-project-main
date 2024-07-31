@@ -175,7 +175,12 @@ function updateButtonWork(id) {
   saveLink.addEventListener("click", () => {
     const newQuantity = Number(quantityInput.value);
     saveNewQuantity(id, newQuantity);
-    console.log(`New Quantity is ${newQuantity}`);
+  });
+  quantityInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      const newQuantity = Number(quantityInput.value);
+      saveNewQuantity(id, newQuantity);
+    }
   });
 }
 
