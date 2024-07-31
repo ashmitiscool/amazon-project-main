@@ -14,7 +14,6 @@ showNumInCart(exportedCart);
 // @s generating html on the page
 // todo: generate HTML of payment summary
 // todo: generate HTML of delivery date
-// todo: remove the cart parameter from the functions, they all should refer to exportedCart
 
 // * Generates HTML and underlying code of buttons in the Order Summary
 // ( not the payment one though that is named as Order summary on the page )
@@ -34,8 +33,6 @@ function displayOrderSummary() {
         matchingItem = product;
       }
     });
-    console.log(`Matching Item is`);
-    console.log(matchingItem);
     // with matching item, we can access anything of the item through products array
 
     // @s HTML Code:
@@ -185,14 +182,19 @@ function updateButtonWork(id) {
 }
 
 function saveNewQuantity(id, newQuantity) {
-  // console.log("Hello");
-  let matchingItem;
-  exportedCart.forEach((cartItem) => {
-    if (cartItem.productId === id) {
-      matchingItem = cartItem;
-    }
-  });
-  matchingItem.quantity = newQuantity;
+  if (newQuantity === 0) {
+    deleteFromCart(id);
+  } else if (newQuantity > 0 && newQuantity < 1000) {
+    let matchingItem;
+    exportedCart.forEach((cartItem) => {
+      if (cartItem.productId === id) {
+        matchingItem = cartItem;
+      }
+    });
+    matchingItem.quantity = newQuantity;
+  } else {
+    console.log("Quantity Invalid");
+  }
   saveCartInStorage();
   displayOrderSummary();
 }
