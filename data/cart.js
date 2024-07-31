@@ -90,6 +90,6 @@ export function deleteFromCart(productId) {
   saveCartInStorage();
 }
 
-function saveCartInStorage() {
+export function saveCartInStorage() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }

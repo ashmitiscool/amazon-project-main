@@ -2,6 +2,7 @@ import {
   cart as exportedCart,
   getCartQuantity,
   deleteFromCart,
+  saveCartInStorage,
 } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { centsToDollars } from "../subset/global_funcs.js";
@@ -14,7 +15,6 @@ showNumInCart(exportedCart);
 // todo: generate HTML of payment summary
 // todo: generate HTML of delivery date
 // todo: remove the cart parameter from the functions, they all should refer to exportedCart
-// issue: cart loading default values from cart instead of products added from amazon.js
 
 // * Generates HTML and underlying code of buttons in the Order Summary
 // ( not the payment one though that is named as Order summary on the page )
@@ -170,13 +170,26 @@ function updateButtonWork(id) {
   // @s Event Listener for save link of product of that specific id
   const saveLink = document.querySelector(`.save-quantity-link-${id}`);
   console.log(saveLink);
+  const quantityInput = document.querySelector(`.js-quantity-input-${id}`);
+  quantityInput.value = prevQuantity;
   saveLink.addEventListener("click", () => {
-    saveNewQuantity();
+    const newQuantity = Number(quantityInput.value);
+    saveNewQuantity(id, newQuantity);
+    console.log(`New Quantity is ${newQuantity}`);
   });
 }
 
-function saveNewQuantity() {
-  console.log("Hello");
+function saveNewQuantity(id, newQuantity) {
+  // console.log("Hello");
+  let matchingItem;
+  exportedCart.forEach((cartItem) => {
+    if (cartItem.productId === id) {
+      matchingItem = cartItem;
+    }
+  });
+  matchingItem.quantity = newQuantity;
+  saveCartInStorage();
+  displayOrderSummary();
 }
 
 // cntxt: Displays the number of items beside the 'checkout' text on the top bar
