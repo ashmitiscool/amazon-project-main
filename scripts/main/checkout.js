@@ -6,24 +6,40 @@ import {
 } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { centsToDollars } from "../subset/global_funcs.js";
+import { hello } from "https://unpkg.com/supersimpledev@1.0.1/hello.esm.js";
+import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js"; // default export
+/* No brackets, default export, brackets, named export */
+
+// @s DayJS practicing
+const today = dayjs();
+const weekLater = today.add(7, "day");
+const tomorrow = today.add(1, "day");
+const days3Later = today.add(3, "day");
+
+// console.log(today.add(7, "day")); // manipulating dates
+// console.log(weekLater.format("dddd, MMMM D"));
+const weekLaterFrmtted = weekLater.format("dddd, MMMM D");
+console.log(weekLaterFrmtted);
+const days3LaterFrmtted = days3Later.format("dddd, MMMM D");
+console.log(days3LaterFrmtted);
+const tomorrowFrmtted = tomorrow.format("dddd, MMMM D");
+console.log(tomorrowFrmtted);
+
+hello();
 
 // docstr: JS for checkout page
 
-showNumInCart(exportedCart);
+showNumInCart();
 
 // @s generating html on the page
 // todo: generate HTML of payment summary
-// todo: generate HTML of delivery date
 
 // * Generates HTML and underlying code of buttons in the Order Summary
 // ( not the payment one though that is named as Order summary on the page )
 function displayOrderSummary() {
-  console.log("Cart is gg :");
-  console.log(exportedCart);
   let orderSummaryHTML = ""; // string to store all the html of order summary
   // cntxt: cartItem for item in cart, product for product in products
   exportedCart.forEach((cartItem) => {
-    console.log(cartItem);
     let matchingItem; // matching item in products array
     const cartItemId = cartItem.productId;
 
@@ -38,8 +54,8 @@ function displayOrderSummary() {
     // @s HTML Code:
     const html = /*html*/ `
     <div class="cart-item-container js-cart-item-container${cartItemId}">
-      <div class="delivery-date">
-        Delivery date: Tuesday, June 21
+      <div class="delivery-date delivery-date-${cartItemId}">
+        Delivery date: ${weekLaterFrmtted}
       </div>
 
       <div class="cart-item-details-grid">
@@ -81,11 +97,13 @@ function displayOrderSummary() {
           </div>
           <div class="delivery-option">
             <input type="radio" checked
-              class="delivery-option-input"
-              name="delivery-option-${cartItem.productId}">
+              class="delivery-option-input delivery-option-input-free-ship-${
+                cartItem.productId
+              }"
+              name="delivery-option-${cartItem.productId}" data-del-type='free'>
             <div>
               <div class="delivery-option-date">
-                Tuesday, June 21
+                ${weekLaterFrmtted}
               </div>
               <div class="delivery-option-price">
                 FREE Shipping
@@ -94,11 +112,15 @@ function displayOrderSummary() {
           </div>
           <div class="delivery-option">
             <input type="radio"
-              class="delivery-option-input"
-              name="delivery-option-${cartItem.productId}">
+              class="delivery-option-input delivery-option-input-3days-ship-${
+                cartItem.productId
+              }"
+              name="delivery-option-${
+                cartItem.productId
+              }" data-del-type='3days'>
             <div>
               <div class="delivery-option-date">
-                Wednesday, June 15
+                ${days3LaterFrmtted}
               </div>
               <div class="delivery-option-price">
                 $4.99 - Shipping
@@ -107,11 +129,13 @@ function displayOrderSummary() {
           </div>
           <div class="delivery-option">
             <input type="radio"
-              class="delivery-option-input"
-              name="delivery-option-${cartItem.productId}">
+              class="delivery-option-input delivery-option-input-1day-ship-${
+                cartItem.productId
+              }"
+              name="delivery-option-${cartItem.productId}" data-del-type='1day'>
             <div>
               <div class="delivery-option-date">
-                Monday, June 13
+                ${tomorrowFrmtted}
               </div>
               <div class="delivery-option-price">
                 $9.99 - Shipping
@@ -127,13 +151,35 @@ function displayOrderSummary() {
   const orderSummaryDiv = document.querySelector(".js-order-summary");
   orderSummaryDiv.innerHTML = orderSummaryHTML;
 
-  // @s adding event listeners / functionality to update and delete buttons
+  // @s adding event listeners / functionality to update, delete and radio buttons
   exportedCart.forEach((cartItem) => {
     const cartItemId = cartItem.productId;
     const updateButton = document.querySelector(`.js-update-cart${cartItemId}`);
     const deleteButton = document.querySelector(
       `.js-delete-from-cart${cartItemId}`
     );
+    const radioButtonFree = document.querySelector(
+      `.delivery-option-input-free-ship-${cartItem.productId}`
+    );
+    console.log("Free");
+    console.log(radioButtonFree);
+    const radioButton3days = document.querySelector(
+      `.delivery-option-input-3days-ship-${cartItem.productId}`
+    );
+    console.log("3 days shipping");
+    console.log(radioButton3days);
+    const radioButton1day = document.querySelector(
+      `.delivery-option-input-1day-ship-${cartItem.productId}`
+    );
+    console.log("1 day shipping");
+    console.log(radioButton1day);
+
+    const radioButtonArray = [
+      radioButtonFree,
+      radioButton3days,
+      radioButton1day,
+    ];
+
     // @s update button functioning
     updateButton.addEventListener("click", () => {
       console.log(`Prod Id is ${cartItemId}`);
@@ -144,9 +190,30 @@ function displayOrderSummary() {
       deleteFromCart(cartItemId);
       displayOrderSummary();
     });
+    // @s radio button functioning
+    radioButtonArray.forEach((radioButton) => {
+      radioButton.addEventListener("click", () => {
+        const deliveryDateDiv = document.querySelector(
+          `.delivery-date-${cartItemId}`
+        );
+        console.log(deliveryDateDiv);
+        if (radioButton.dataset.delType === "free") {
+          console.log("free");
+          deliveryDateDiv.innerText = `Delivery date: ${weekLaterFrmtted}`;
+        }
+        if (radioButton.dataset.delType === "3days") {
+          console.log("3days");
+          deliveryDateDiv.innerText = `Delivery date: ${days3LaterFrmtted}`;
+        }
+        if (radioButton.dataset.delType === "1day") {
+          console.log("1day");
+          deliveryDateDiv.innerText = `Delivery date: ${tomorrowFrmtted}`;
+        }
+      });
+    });
   });
   // changing the checkout item text whenever this function called
-  showNumInCart(exportedCart);
+  showNumInCart();
 }
 displayOrderSummary();
 

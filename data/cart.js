@@ -38,7 +38,6 @@ export function getCartQuantity() {
 // format -> index: index of the button element ( 0 at top left )
 // Extracts data from amazon homepage
 export function addToCart(addToCartButton, index) {
-  const productName = addToCartButton.dataset.productName;
   const productId = addToCartButton.dataset.productId; // ID of the product which 'Add to Cart' button is pressed (not necessarily in cart)
 
   let isInCart = false; // flag to check if in cart
