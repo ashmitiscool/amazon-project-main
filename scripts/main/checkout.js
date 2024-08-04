@@ -5,7 +5,7 @@ import {
   saveCartInStorage,
 } from "../../data/cart.js";
 import { products } from "../../data/products.js";
-import { centsToDollars } from "../subset/global_funcs.js";
+import { centsToDollars, hardCopy } from "../subset/global_funcs.js";
 import { hello } from "https://unpkg.com/supersimpledev@1.0.1/hello.esm.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js"; // default export
 /* No brackets, default export, brackets, named export */
@@ -66,7 +66,7 @@ function displayOrderSummary() {
           <div class="product-name">
             ${matchingItem.name}
           </div>
-          <div class="product-price">
+          <div class="product-price js-product-price-${cartItemId}">
             $${centsToDollars(matchingItem.priceCents)}
           </div>
           <div class="product-quantity">
@@ -209,6 +209,7 @@ function displayOrderSummary() {
           console.log("1day");
           deliveryDateDiv.innerText = `Delivery date: ${tomorrowFrmtted}`;
         }
+        displayAmounts();
       });
     });
   });
@@ -270,10 +271,76 @@ function saveNewQuantity(id, newQuantity) {
 // * (does not return the number of elements in cart, that is getCartQuantity() from cart.js)
 function showNumInCart() {
   const checkOutNumOfItems = document.querySelector(".return-to-home-link");
+  const ordSumItemCount = document.querySelector(".ord-sum-item-count");
+  console.log(ordSumItemCount.innerText);
   const cartQuantity = getCartQuantity();
   if (cartQuantity === 1) {
     checkOutNumOfItems.innerText = `${getCartQuantity()} item`;
   } else {
     checkOutNumOfItems.innerText = `${getCartQuantity()} items`;
   }
+  ordSumItemCount.innerText = `Items (${getCartQuantity()}):`;
+  displayAmounts();
 }
+
+// function getIdArray() {
+//   console.log("getIdArray");
+//   let idArray = [];
+//   exportedCart.forEach((productObj) => {
+//     idArray.push(productObj.productId);
+//   });
+//   return idArray;
+// }
+
+function displayAmounts() {
+  let shipAmount = 0;
+  let amountWithShip = 0;
+  let rawAmount = 0; // stores the amount without shipping or taxes
+  let taxAmount = 0;
+  let finalAmount = 0;
+  exportedCart.forEach((productObj) => {
+    const prodQuantity = productObj.quantity;
+    const prodId = productObj.productId;
+    let matchingProd;
+    products.forEach((prodObj) => {
+      if (prodObj.id === prodId) {
+        matchingProd = prodObj;
+      }
+    });
+    const prodPriceEach = matchingProd.priceCents; // ! in cents
+    const prodTotalPrice = prodPriceEach * prodQuantity; // ! in cents
+    rawAmount += prodTotalPrice;
+    amountWithShip += prodTotalPrice;
+  });
+  document.querySelectorAll(`.delivery-option-input`).forEach((option) => {
+    console.log(option.checked);
+    if (option.checked) {
+      console.log("trigga");
+      // console.log(option);
+      const optionData = option.dataset.delType;
+      // console.log(optionData);
+      if (optionData === "3days") {
+        amountWithShip += 499;
+        shipAmount += 499;
+      } else if (optionData === "1day") {
+        amountWithShip += 999;
+        shipAmount += 999;
+      }
+    }
+  });
+  taxAmount = 0.1 * amountWithShip;
+  finalAmount = amountWithShip + taxAmount;
+
+  const rawAmountElement = document.querySelector(".raw-amount");
+  const shipAmountElement = document.querySelector(".shipping");
+  const amountWithShipElement = document.querySelector(".total-b4-tax");
+  const taxAmountElement = document.querySelector(".tax-amount");
+  const finalAmountElement = document.querySelector(".order-total");
+
+  rawAmountElement.innerText = `$${centsToDollars(rawAmount)}`;
+  shipAmountElement.innerText = `$${centsToDollars(shipAmount)}`;
+  amountWithShipElement.innerText = `$${centsToDollars(amountWithShip)}`;
+  taxAmountElement.innerText = `$${centsToDollars(taxAmount)}`;
+  finalAmountElement.innerText = `$${centsToDollars(finalAmount)}`;
+}
+displayAmounts();
